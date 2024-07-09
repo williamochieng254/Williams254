@@ -159,3 +159,117 @@ void addStudent() {
     number_of_students++;
 }
 
+// This sector helps the user to view the students and the group they have been assigned to.
+void viewStudents() {
+    cout << "Students List:\n";
+    for (int i = 0; i < number_of_students; i++) {
+        cout << students[i].student_number << ": " << students[i].first_name << " " << students[i].last_name << " (" << students[i].course_group << ")\n";
+    }
+}
+
+// This here gives output of showing the user the clubs and activities they can choose from.
+void viewClubs(School& school) {
+    cout << "Here are some of the clubs available:\n";
+    for (const auto& club : school.clubs) {
+        cout << "\t" << club.name << "\n";
+    }
+}
+
+// This here gives output of showing the user the sports he can choose from.
+void viewSports(School& school) {
+    cout << "These are the sports available:\n";
+    for (const auto& sport : school.sports) {
+        cout << "\t" << sport.name << "\n";
+    }
+}
+
+// This helps to view students by how they are grouped.
+void viewGroups() {
+    cout << "Grouped students:\n";
+}
+
+// This helps to save the data entered by the users.
+void save() {
+    cout << "Saving all files...\n";
+}
+
+// Assists uders to enter their student number in process of registering.
+void registerForActivities(School& school) {
+    cout << "Enter student number: ";
+    int student_number;
+    cin >> student_number;
+
+    // Find the student by their student number.
+    bool student_found = false;
+    Gender gender;
+    for (int i = 0; i < number_of_students; i++) {
+        if (students[i].student_number == student_number) {
+            gender = students[i].gender;
+            student_found = true;
+            break;
+        }
+    }
+
+    if (!student_found) {
+        cout << "Student not found.\n";
+        return;
+    }
+
+    int activities_assigned = 0;
+    bool sport_assigned = false;
+
+    // Assigns 0 fro chosing sports and 1 for thec clubs.
+    while (activities_assigned < max_total_activities) {
+        cout << "Choose activity type (0 for sport, 1 for club): ";
+        int activity_type;
+        cin >> activity_type;
+
+        // Pop up when the student choses 0 for sports.
+        if (activity_type == 0 && !sport_assigned) {
+            cout << "Choose a sport: 0. Rugby, 1. Athletics, 2. Swimming, 3. Soccer: ";
+            int sport;
+            cin >> sport;
+            string sport_name;
+            switch (sport) {
+                case 0: sport_name = "Rugby"; break;
+                case 1: sport_name = "Athletics"; break;
+                case 2: sport_name = "Swimming"; break;
+                case 3: sport_name = "Soccer"; break;
+                default: cout << "Invalid sport choice.\n"; continue;
+            }
+            // Stops assigning of sport if its full or unequal gender ratio.
+            if (school.assignActivityToStudent(student_number, gender, sport_name)) {
+                activities_assigned++;
+                sport_assigned = true;
+            } else {
+                cout << "Unable to assign sport due to capacity or gender ratio.\n";
+            }
+
+            // The pop up when the student choses 1 for the clubs and activities.
+        } else if (activity_type == 1) {
+            cout << "Choose a club: 0. Journalism Club, 1. Red Cross Society, 2. AISEC, 3. Business Club, 4. Computer Science Club: ";
+            int club;
+            cin >> club;
+            string club_name;
+            switch (club) {
+                case 0: club_name = "Journalism Club"; break;
+                case 1: club_name = "Red Cross Society"; break;
+                case 2: club_name = "AISEC"; break;
+                case 3: club_name = "Business Club"; break;
+                case 4: club_name = "Computer Science Club"; break;
+                default: cout << "Invalid club choice.\n"; continue;
+            }
+
+            // The student will not be unable to be assinged a club if the capacity is at its max or the gender ration is to equal.
+            if (school.assignActivityToStudent(student_number, gender, club_name)) {
+                activities_assigned++;
+            } else {
+                cout << "Unable to assign club due to capacity or gender ratio.\n";
+            }
+            // Any other invalid input will bring the erroe message below.
+        } else {
+            cout << "Invalid activity type.\n";
+        }
+    }
+}
+
