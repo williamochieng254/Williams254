@@ -159,6 +159,7 @@ void addStudent() {
     number_of_students++;
 }
 
+
 // This sector helps the user to view the students and the group they have been assigned to.
 void viewStudents() {
     cout << "Students List:\n";
@@ -272,4 +273,3 @@ void registerForActivities(School& school) {
         }
     }
 }
-
