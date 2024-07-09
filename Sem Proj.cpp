@@ -7,7 +7,6 @@
 #include <algorithm>
 #include <random>
 #include <ctime>
-
 struct student {
     string first_name;
     string last_name;
